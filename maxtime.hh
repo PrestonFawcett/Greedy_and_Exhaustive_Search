@@ -228,7 +228,6 @@ std::unique_ptr<RideVector> filter_ride_vector
 {
 // TODO: implement this function, then delete the return statement below
 	std::unique_ptr<RideVector> filtered(new RideVector);
-	// RideVector filtered;
 
 	for (auto ride : source) {
 		if (ride->rideTime() >= min_time && ride->rideTime() <= max_time)
@@ -254,7 +253,33 @@ std::unique_ptr<RideVector> greedy_max_time
 )
 {
 // TODO: implement this function, then delete the return statement below
-	return nullptr;
+	RideVector ride_options = rides;
+	std::unique_ptr<RideVector> result(new RideVector);
+	double result_cost = 0;
+
+	while (ride_options.size() > 0) {
+		auto current_ride = ride_options[0];
+		auto iter = ride_options.begin();
+		auto current_iter = iter;
+		for (auto ride : ride_options) {
+			if (ride->rideTime() > current_ride->rideTime()) {
+				current_ride = ride;
+				current_iter = iter;
+			}
+			iter++;
+		}
+		
+		ride_options.erase(current_iter);
+		if (result_cost + current_ride->cost() <= total_cost) {
+			result->push_back(current_ride);
+			result_cost += current_ride->cost();
+			
+		}
+	//	std::cout << current_ride->rideTime() << " " << current_ride->cost() 
+	//		<< " " << result_cost << " " << total_cost << std::endl;
+	}
+
+	return result;
 }
 
 
