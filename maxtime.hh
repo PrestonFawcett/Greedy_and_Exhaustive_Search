@@ -227,7 +227,17 @@ std::unique_ptr<RideVector> filter_ride_vector
 )
 {
 // TODO: implement this function, then delete the return statement below
-	return nullptr;
+	std::unique_ptr<RideVector> filtered(new RideVector);
+	// RideVector filtered;
+
+	for (auto ride : source) {
+		if (ride->rideTime() >= min_time && ride->rideTime() <= max_time)
+			filtered->push_back(std::shared_ptr<RideItem>(ride));
+		if (filtered->size() >= total_size)
+			break;
+	}
+
+	return filtered;
 
 }
 
