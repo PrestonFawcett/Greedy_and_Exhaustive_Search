@@ -299,7 +299,7 @@ std::unique_ptr<RideVector> exhaustive_max_time
 	for (uint64_t bits = 0; bits <= (pow(2, ride_options.size()) - 1); bits++) {
 		RideVector candidate;
 		for (size_t j = 0; j <= ride_options.size() - 1; j++) {
-			if (bits > j)
+			if (((bits >> j) & 1) == 1)
 				candidate.push_back(ride_options[j]);
 		}
 		double vector_cost, vector_time, best_cost, best_time;
