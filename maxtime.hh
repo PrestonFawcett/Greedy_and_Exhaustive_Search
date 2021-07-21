@@ -272,8 +272,7 @@ std::unique_ptr<RideVector> greedy_max_time
 		ride_options.erase(current_iter);
 		if (result_cost + current_ride->cost() <= total_cost) {
 			result->push_back(current_ride);
-			result_cost += current_ride->cost();
-			
+			result_cost += current_ride->cost();			
 		}
 	//	std::cout << current_ride->rideTime() << " " << current_ride->cost() 
 	//		<< " " << result_cost << " " << total_cost << std::endl;
@@ -294,7 +293,24 @@ std::unique_ptr<RideVector> exhaustive_max_time
 )
 {
 // TODO: implement this function, then delete the return statement below
-	return nullptr;
+	auto ride_options = rides;
+	std::unique_ptr<RideVector> best(new RideVector);
+
+	for (uint64_t bits = 0; bits <= (pow(2, ride_options.size()) - 1); bits++) {
+		RideVector candidate;
+		for (size_t j = 0; j <= ride_options.size() - 1; j++) {
+			if (bits > j)
+				candidate.push_back(ride_options[j]);
+		}
+		double vector_cost, vector_time, best_cost, best_time;
+		sum_ride_vector(candidate, vector_cost, vector_time);
+		sum_ride_vector(*best, best_cost, best_time);
+		if (vector_cost <= total_cost)
+			if (!best->size() || vector_time > best_time)
+				*best = candidate;
+	}
+
+	return best;
 }
 
 
