@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 
+#include "timer.hh"
 
 // One ride item available for purchase.
 class RideItem
@@ -253,6 +254,7 @@ std::unique_ptr<RideVector> greedy_max_time
 )
 {
 // TODO: implement this function, then delete the return statement below
+	Timer timer;
 	RideVector ride_options = rides;
 	std::unique_ptr<RideVector> result(new RideVector);
 	double result_cost = 0;
@@ -262,7 +264,8 @@ std::unique_ptr<RideVector> greedy_max_time
 		auto iter = ride_options.begin();
 		auto current_iter = iter;
 		for (auto ride : ride_options) {
-			if (ride->rideTime() > current_ride->rideTime()) {
+			if (ride->rideTime()/ride->cost() > 
+			current_ride->rideTime()/current_ride->cost()) {
 				current_ride = ride;
 				current_iter = iter;
 			}
@@ -277,6 +280,8 @@ std::unique_ptr<RideVector> greedy_max_time
 	//	std::cout << current_ride->rideTime() << " " << current_ride->cost() 
 	//		<< " " << result_cost << " " << total_cost << std::endl;
 	}
+	double elapsed = timer.elapsed();
+	std::cout << "Elapsed time in seconds: " << elapsed << std::endl;
 
 	return result;
 }
@@ -293,6 +298,7 @@ std::unique_ptr<RideVector> exhaustive_max_time
 )
 {
 // TODO: implement this function, then delete the return statement below
+	Timer timer;
 	auto ride_options = rides;
 	std::unique_ptr<RideVector> best(new RideVector);
 
@@ -309,6 +315,8 @@ std::unique_ptr<RideVector> exhaustive_max_time
 			if (!best->size() || vector_time > best_time)
 				*best = candidate;
 	}
+	double elapsed = timer.elapsed();
+	std::cout << "Elapsed time in seconds: " << elapsed << std::endl;
 
 	return best;
 }
